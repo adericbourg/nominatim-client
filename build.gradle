@@ -4,7 +4,7 @@ plugins {
 }
 
 group 'net.dericbourg'
-version '1.0-SNAPSHOT'
+version Git.getVersion()
 
 repositories {
     mavenCentral()
@@ -24,5 +24,30 @@ publishing {
                 password = System.getenv("GITHUB_TOKEN")
             }
         }
+    }
+}
+
+
+class Git {
+
+    static String getVersion() {
+        if (isOnTag()) {
+            return getCurrentTag()
+        } else {
+            return "${new Date().format('yyyyMMddHHmmss')}-${getGitHash()}-SNAPSHOT"
+        }
+    }
+
+    static String getCurrentTag() {
+        return "git describe --tags --exact-match".execute().text.trim()
+    }
+
+    static Boolean isOnTag() {
+        return !getCurrentTag().isBlank()
+    }
+
+    static String getGitHash() {
+        return "git rev-parse --short HEAD".execute().text.trim()
+
     }
 }
