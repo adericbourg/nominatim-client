@@ -17,7 +17,7 @@ repositories {
 }
 
 dependencies {
-    implementation 'net.dericbourg:nominatif-client:latest.release'
+    implementation 'net.dericbourg:nominatim-client:latest.release'
 }
 ```
 
