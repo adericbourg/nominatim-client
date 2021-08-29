@@ -36,4 +36,4 @@ out/
 ### VS Code ###
 .vscode/
 
-src/main/kotlin/net/dericbourg/nominatim/Sandbox.kt
+src/test/kotlin/Sandbox.kt

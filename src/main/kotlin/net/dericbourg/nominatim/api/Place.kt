@@ -1,15 +1,17 @@
 package net.dericbourg.nominatim.api
 
+import com.google.gson.annotations.SerializedName
+
 data class Place(
-    val placeId: Long,
-    val boundingBox: List<Double>,
-    val lat: Double,
-    val lon: Double,
-    val displayName: String,
-    val category: String,
-    val importance: Double,
-    val placeRank: Int,
-    val icon: String,
-    val address: AddressDetails,
-    val namedetails: Map<String, String>,
+    @SerializedName("place_id") val placeId: Long,
+    @SerializedName("boundingbox") val boundingBox: List<Double>,
+    @SerializedName("lat") val lat: Double,
+    @SerializedName("lon") val lon: Double,
+    @SerializedName("display_name") val displayName: String,
+    @SerializedName("category") val category: String,
+    @SerializedName("importance") val importance: Double,
+    @SerializedName("place_rank") val placeRank: Int,
+    @SerializedName("icon") val icon: String?,
+    @SerializedName("address") val address: AddressDetails,
+    @SerializedName("namedetails") val nameDetails: Map<String, String>,
 )
