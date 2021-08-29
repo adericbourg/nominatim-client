@@ -13,6 +13,10 @@
 repositories {
     maven {
         url = uri("https://maven.pkg.github.com/adericbourg/nominatim-client")
+        credentials {
+            username $githubUser
+            password $githubToken
+        }
     }
 }
 
@@ -20,6 +24,8 @@ dependencies {
     implementation 'net.dericbourg:nominatim-client:latest.release'
 }
 ```
+
+> [How to get my `githubToken`?](https://docs.github.com/en/github/authenticating-to-github/keeping-your-account-and-data-secure/creating-a-personal-access-token)
 
 ### Create a client
 
