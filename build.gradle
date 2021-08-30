@@ -60,6 +60,13 @@ publishing {
                         url = 'https://www.gnu.org/licenses/gpl-3.0.txt'
                     }
                 }
+                developers {
+                    developer {
+                        id = "adericbourg"
+                        name = "Alban Dericbourg"
+                        email = "adericbourg@noreply.github.com"
+                    }
+                }
                 scm {
                     connection = 'scm:git:git@github.com:adericbourg/nominatim-client.git'
                     developerConnection = 'scm:git:git@github.com:adericbourg/nominatim-client.git'
