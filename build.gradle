@@ -1,7 +1,10 @@
+import java.time.Duration
+
 plugins {
     id 'org.jetbrains.kotlin.jvm' version '1.5.21'
     id 'maven-publish'
     id 'signing'
+    id "io.github.gradle-nexus.publish-plugin" version "1.0.0"
 }
 
 group 'net.dericbourg'
@@ -27,6 +30,9 @@ java {
 
 ext.isReleaseVersion = !version.endsWith("SNAPSHOT")
 
+def sonatypeUsername =  System.getenv("MAVEN_USERNAME")
+def sonatypePassword = System.getenv("MAVEN_PASSWORD")
+
 publishing {
     repositories {
         maven {
@@ -35,8 +41,8 @@ publishing {
             name = "OSSRH"
             url = isReleaseVersion ? releaseRepo : snapshotRepo
             credentials {
-                username = System.getenv("MAVEN_USERNAME")
-                password = System.getenv("MAVEN_PASSWORD")
+                username = sonatypeUsername
+                password = sonatypePassword
             }
         }
     }
@@ -62,6 +68,27 @@ publishing {
             }
         }
     }
+}
+
+nexusPublishing {
+    repositories {
+        sonatype()
+    }
+    // these are not strictly required. The default timeouts are set to 1 minute. But Sonatype can be really slow.
+    // If you get the error "java.net.SocketTimeoutException: timeout", these lines will help.
+    connectTimeout = Duration.ofMinutes(3)
+    clientTimeout = Duration.ofMinutes(3)
+}
+
+signing {
+    def signingKey = System.getenv("PGP_KEY")
+    def signingPassword = System.getenv("PGP_KEY_PASSWORD")
+    useInMemoryPgpKeys(signingKey, signingPassword)
+    sign publishing.publications.mavenJava
+}
+
+tasks.withType(Sign) {
+    onlyIf { isReleaseVersion }
 }
 
 class Git {
