@@ -19,3 +19,8 @@ jobs:
         uses: gradle/wrapper-validation-action@e6e38bacfdf1a337459f332974bb2327a31aaf4b
       - name: Build with Gradle
         run: ./gradlew build
+      - name: Deploy
+        if: github.ref == 'refs/heads/master'
+        run: .build/publish.sh
+        env:
+          GPG_SECRET: ${{ secrets.GPG_SECRET }}

@@ -30,29 +30,15 @@ java {
 
 ext.isReleaseVersion = !version.endsWith("SNAPSHOT")
 
-def sonatypeUsername =  System.getenv("MAVEN_USERNAME")
-def sonatypePassword = System.getenv("MAVEN_PASSWORD")
-
 publishing {
-    repositories {
-        maven {
-            def releaseRepo = "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
-            def snapshotRepo = "https://oss.sonatype.org/content/repositories/snapshots/"
-            name = "OSSRH"
-            url = isReleaseVersion ? releaseRepo : snapshotRepo
-            credentials {
-                username = sonatypeUsername
-                password = sonatypePassword
-            }
-        }
-    }
     publications {
         mavenJava(MavenPublication) {
             pom {
                 groupId = project.group
                 name = project.name
-                description = 'Example Project to learn how to deploy to OSSRH'
-                url = 'https://example.com/'
+                description = 'A JVM Nominatim client'
+                url = 'https://github.com/adericbourg/nominatim-client/'
+                inceptionYear = '2021'
                 from components.java
                 licenses {
                     license {
@@ -75,6 +61,18 @@ publishing {
             }
         }
     }
+    repositories {
+        maven {
+            name = "OSSRH"
+            credentials {
+                username = project.hasProperty("ossrhUsername") ? project.property("ossrhUsername") : "N/A"
+                password = project.hasProperty("ossrhPassword") ? project.property("ossrhPassword") : "N/A"
+            }
+            def releasesRepoUrl = "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
+            def snapshotsRepoUrl = "https://oss.sonatype.org/content/repositories/snapshots/"
+            url = isReleaseVersion ? releasesRepoUrl : snapshotsRepoUrl
+        }
+    }
 }
 
 nexusPublishing {
@@ -88,9 +86,7 @@ nexusPublishing {
 }
 
 signing {
-    def signingKey = System.getenv("PGP_KEY")
-    def signingPassword = System.getenv("PGP_KEY_PASSWORD")
-    useInMemoryPgpKeys(signingKey, signingPassword)
+    useGpgCmd()
     sign publishing.publications.mavenJava
 }
 
