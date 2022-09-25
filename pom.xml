@@ -6,9 +6,21 @@
     <groupId>net.dericbourg</groupId>
     <artifactId>nominatim-client</artifactId>
     <version>1.0.0</version>
+    <name>OSRM Nominatim client</name>
     <description>
         A JVM OpenStreetMap's Nominatim client
     </description>
+    <url>https://github.com/adericbourg/nominatim-client</url>
+    <scm>
+        <url>https://github.com/adericbourg/nominatim-client</url>
+    </scm>
+    <developers>
+        <developer>
+            <name>Alban Dericbourg</name>
+            <email>alban@dericbourg.net</email>
+            <roles><role>maintainer</role></roles>
+        </developer>
+    </developers>
     <properties>
         <kotlin.version>1.7.10</kotlin.version>
         <kotlin.compiler.incremental>true</kotlin.compiler.incremental>
