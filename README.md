@@ -1,6 +1,6 @@
 # OpenStreetMap Nominatim client for the JVM
 
-[![Java/Gradle CI](https://github.com/adericbourg/nominatim-client/actions/workflows/gradle-ci.yaml/badge.svg)](https://github.com/adericbourg/nominatim-client/actions/workflows/gradle-ci.yaml)
+[![Java/Maven CI](https://github.com/adericbourg/nominatim-client/actions/workflows/maven-ci.yaml/badge.svg)](https://github.com/adericbourg/nominatim-client/actions/workflows/maven-ci.yaml)
 
 > ❗ This library is in an early development phase: expect stability
 > issues and breaking changes. 
