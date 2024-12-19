@@ -22,7 +22,7 @@
         </developer>
     </developers>
     <properties>
-        <kotlin.version>1.9.25</kotlin.version>
+        <kotlin.version>2.1.0</kotlin.version>
         <kotlin.compiler.incremental>true</kotlin.compiler.incremental>
         <retrofit2.version>2.11.0</retrofit2.version>
         <sonatype.url>https://s01.oss.sonatype.org/</sonatype.url>
