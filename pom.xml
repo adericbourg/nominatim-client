@@ -28,7 +28,7 @@
         <kotlin.version>2.1.10</kotlin.version>
         <kotlin.compiler.incremental>true</kotlin.compiler.incremental>
         <retrofit2.version>3.0.0</retrofit2.version>
-        <sonatype.url>https://s01.oss.sonatype.org/</sonatype.url>
+        <sonatype.url>https://central.sonatype.com/</sonatype.url>
     </properties>
     <dependencies>
         <dependency>
@@ -159,11 +159,11 @@
     </licenses>
     <distributionManagement>
         <snapshotRepository>
-            <id>ossrh</id>
+            <id>sonatype-central</id>
             <url>${sonatype.url}content/repositories/snapshots</url>
         </snapshotRepository>
         <repository>
-            <id>ossrh</id>
+            <id>conatype-central</id>
             <url>${sonatype.url}service/local/staging/deploy/maven2/</url>
         </repository>
     </distributionManagement>
