@@ -165,7 +165,7 @@
             </releases>
         </snapshotRepository>
         <repository>
-            <id>conatype-central</id>
+            <id>sonatype-central</id>
             <url>${sonatype.url}/service/local/staging/deploy/maven2/</url>
             <snapshots>
                 <enabled>false</enabled>
