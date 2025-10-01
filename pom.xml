@@ -28,7 +28,7 @@
         <kotlin.version>2.1.10</kotlin.version>
         <kotlin.compiler.incremental>true</kotlin.compiler.incremental>
         <retrofit2.version>3.0.0</retrofit2.version>
-        <sonatype.url>https://central.sonatype.com/</sonatype.url>
+        <sonatype.url>https://central.sonatype.com</sonatype.url>
     </properties>
     <dependencies>
         <dependency>
@@ -85,7 +85,6 @@
                 <extensions>true</extensions>
                 <configuration>
                     <publishingServerId>sonatype-central</publishingServerId>
-                    <tokenAuth>true</tokenAuth>
                     <autoPublish>true</autoPublish>
                     <waitUntil>published</waitUntil>
                 </configuration>
@@ -160,12 +159,17 @@
     <distributionManagement>
         <snapshotRepository>
             <id>sonatype-central</id>
-            <url>${sonatype.url}content/repositories/snapshots</url>
+            <url>${sonatype.url}/repositories/snapshots</url>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
         </snapshotRepository>
         <repository>
             <id>conatype-central</id>
-            <url>${sonatype.url}service/local/staging/deploy/maven2/</url>
+            <url>${sonatype.url}/service/local/staging/deploy/maven2/</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
         </repository>
     </distributionManagement>
-
 </project>
