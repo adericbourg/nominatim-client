@@ -6,19 +6,21 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>net.dericbourg</groupId>
     <artifactId>nominatim-client</artifactId>
-    <version>1.0.7-SNAPSHOT</version>
+    <version>1.0.8-SNAPSHOT</version>
     <name>OSRM Nominatim client</name>
     <description>
         A JVM OpenStreetMap's Nominatim client
     </description>
     <url>https://github.com/adericbourg/nominatim-client</url>
     <scm>
-        <url>https://github.com/adericbourg/nominatim-client</url>
+        <connection>scm:git:git://github.com/adericbourg/nominatim-client.git</connection>
+        <developerConnection>scm:git:ssh://github.com:adericbourg/nominatim-client.git</developerConnection>
+        <url>http://github.com/adericbourg/nominatim-client/tree/master</url>
     </scm>
     <developers>
         <developer>
             <name>Alban Dericbourg</name>
-            <email>alban@dericbourg.net</email>
+            <email>alban@dericbourg.dev</email>
             <roles>
                 <role>maintainer</role>
             </roles>
@@ -60,35 +62,8 @@
                 <groupId>org.jetbrains.kotlin</groupId>
                 <artifactId>kotlin-maven-plugin</artifactId>
                 <version>${kotlin.version}</version>
-
-                <executions>
-                    <execution>
-                        <id>compile</id>
-                        <goals>
-                            <goal>compile</goal>
-                        </goals>
-                    </execution>
-
-                    <execution>
-                        <id>test-compile</id>
-                        <goals>
-                            <goal>test-compile</goal>
-                        </goals>
-                    </execution>
-                </executions>
             </plugin>
-            <!-- Publication -->
-            <plugin>
-                <groupId>org.sonatype.central</groupId>
-                <artifactId>central-publishing-maven-plugin</artifactId>
-                <version>0.9.0</version>
-                <extensions>true</extensions>
-                <configuration>
-                    <publishingServerId>sonatype-central</publishingServerId>
-                    <autoPublish>true</autoPublish>
-                    <waitUntil>published</waitUntil>
-                </configuration>
-            </plugin>
+            <!-- Publishing requirements -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
@@ -123,7 +98,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
-                <version>3.11.2</version>
+                <version>3.12.0</version>
                 <executions>
                     <execution>
                         <id>attach-javadocs</id>
@@ -147,6 +122,18 @@
                     </execution>
                 </executions>
             </plugin>
+            <!-- Publish -->
+            <plugin>
+                <groupId>org.sonatype.central</groupId>
+                <artifactId>central-publishing-maven-plugin</artifactId>
+                <version>0.9.0</version>
+                <extensions>true</extensions>
+                <configuration>
+                    <publishingServerId>central</publishingServerId>
+                    <autoPublish>true</autoPublish>
+                    <waitUntil>published</waitUntil>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
     <licenses>
@@ -156,20 +143,5 @@
             <distribution>repo</distribution>
         </license>
     </licenses>
-    <distributionManagement>
-        <snapshotRepository>
-            <id>sonatype-central</id>
-            <url>${sonatype.url}/repositories/snapshots</url>
-            <releases>
-                <enabled>false</enabled>
-            </releases>
-        </snapshotRepository>
-        <repository>
-            <id>sonatype-central</id>
-            <url>${sonatype.url}/service/local/staging/deploy/maven2/</url>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </repository>
-    </distributionManagement>
+
 </project>
