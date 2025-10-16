@@ -27,7 +27,7 @@
         </developer>
     </developers>
     <properties>
-        <kotlin.version>2.1.10</kotlin.version>
+        <kotlin.version>2.2.20</kotlin.version>
         <kotlin.compiler.incremental>true</kotlin.compiler.incremental>
         <retrofit2.version>3.0.0</retrofit2.version>
         <sonatype.url>https://central.sonatype.com</sonatype.url>
