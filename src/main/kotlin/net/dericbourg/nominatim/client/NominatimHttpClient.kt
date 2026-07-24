@@ -18,25 +18,33 @@ class NominatimHttpClient internal constructor(userAgent: String, baseUrl: Strin
     }
 
     override fun search(request: SearchRequest): SearchResponse {
-        val queryMap = when (val query = request.query) {
-            is FreeFormSearchQuery -> mapOf("q" to query.value)
-            is StructuredSearchQuery -> buildMap {
-                query.street?.let { put("street", it) }
-                query.city?.let { put("city", it) }
-                query.county?.let { put("county", it) }
-                query.state?.let { put("state", it) }
-                query.country?.let { put("country", it) }
-                query.postalCode?.let { put("postalcode", it) }
+        val queryMap = buildMap {
+            when (val query = request.query) {
+                is FreeFormSearchQuery -> put("q", query.value)
+                is StructuredSearchQuery -> {
+                    query.street?.let { put("street", it) }
+                    query.city?.let { put("city", it) }
+                    query.county?.let { put("county", it) }
+                    query.state?.let { put("state", it) }
+                    query.country?.let { put("country", it) }
+                    query.postalCode?.let { put("postalcode", it) }
+                }
             }
+            request.limit?.let { put("limit", it.toString()) }
+            request.countryCodes?.let { put("countrycodes", it.joinToString(",")) }
+            request.viewBox?.let { put("viewbox", it.toParam()) }
+            request.bounded?.let { put("bounded", if (it) "1" else "0") }
+            request.excludePlaceIds?.let { put("exclude_place_ids", it.joinToString(",")) }
+            request.dedupe?.let { put("dedupe", if (it) "1" else "0") }
+            request.acceptLanguage?.let { put("accept-language", it) }
+            request.email?.let { put("email", it) }
+            request.extraTags?.let { put("extratags", if (it) "1" else "0") }
+            put("addressdetails", "1")
+            put("namedetails", "1")
+            put("format", "jsonv2")
         }
 
-        val response = api.search(
-            queryMap + mapOf(
-                "addressdetails" to "1",
-                "namedetails" to "1",
-                "format" to "jsonv2"
-            )
-        ).execute()
+        val response = api.search(queryMap).execute()
 
         if (response.isSuccessful) {
             if (response.body() == null) {

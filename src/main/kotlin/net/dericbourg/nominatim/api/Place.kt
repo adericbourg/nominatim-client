@@ -14,4 +14,5 @@ data class Place(
     @SerializedName("icon") val icon: String?,
     @SerializedName("address") val address: AddressDetails,
     @SerializedName("namedetails") val nameDetails: Map<String, String>,
+    @SerializedName("extratags") val extraTags: Map<String, String>? = null,
 )

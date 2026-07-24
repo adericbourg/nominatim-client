@@ -43,7 +43,35 @@ internal data class StructuredSearchQuery(
     val postalCode: String?,
 ) : SearchQuery
 
-data class SearchRequest(val query: SearchQuery) {
+/**
+ * A rectangular area, expressed as its two opposite corners, used to bias or restrict
+ * search results (Nominatim's `viewbox` parameter).
+ */
+data class ViewBox(val x1: Double, val y1: Double, val x2: Double, val y2: Double) {
+    internal fun toParam(): String = "$x1,$y1,$x2,$y2"
+}
+
+data class SearchRequest(
+    val query: SearchQuery,
+    /** Limit the number of returned results (1-50, Nominatim default is 10). */
+    val limit: Int? = null,
+    /** Limit results to the given ISO 3166-1alpha2 country codes. */
+    val countryCodes: List<String>? = null,
+    /** Preferred area to find search results (`bounded` controls whether it's a hard restriction). */
+    val viewBox: ViewBox? = null,
+    /** Restrict results to those contained within [viewBox]. */
+    val bounded: Boolean? = null,
+    /** OSM place ids to skip in the results, e.g. to paginate through repeated searches. */
+    val excludePlaceIds: List<Long>? = null,
+    /** Whether to detect and remove duplicate OSM objects (Nominatim default is true). */
+    val dedupe: Boolean? = null,
+    /** Preferred language order for results, as an RFC2616 Accept-Language string. */
+    val acceptLanguage: String? = null,
+    /** Identifies the request source for usage tracking, per the Nominatim usage policy. */
+    val email: String? = null,
+    /** Include additional information in the result if available (e.g. Wikipedia link, opening hours). */
+    val extraTags: Boolean? = null,
+) {
     companion object {
         /** A free-form search, e.g. `SearchRequest.query("tour eiffel, paris")`. */
         fun query(value: String): SearchRequest {

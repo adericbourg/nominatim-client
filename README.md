@@ -45,3 +45,12 @@ val searchResponse = client.search(
 )
 ```
 
+`SearchRequest` also accepts optional result-filtering parameters (`limit`, `countryCodes`,
+`viewBox`, `bounded`, `excludePlaceIds`, `dedupe`, `acceptLanguage`, `email`, `extraTags`):
+
+```kotlin
+val searchResponse = client.search(
+    SearchRequest.query("tour eiffel").copy(limit = 5, countryCodes = listOf("fr"))
+)
+```
+
