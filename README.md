@@ -37,3 +37,11 @@ val searchResponse = client.search(
 )
 ```
 
+A structured query over individual address components is also supported:
+
+```kotlin
+val searchResponse = client.search(
+    SearchRequest.structured(street = "avenue Anatole France", city = "Paris", country = "France")
+)
+```
+

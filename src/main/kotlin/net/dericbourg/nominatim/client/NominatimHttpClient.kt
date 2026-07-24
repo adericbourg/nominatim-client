@@ -18,10 +18,16 @@ class NominatimHttpClient internal constructor(userAgent: String, baseUrl: Strin
     }
 
     override fun search(request: SearchRequest): SearchResponse {
-        val queryMap = if (request is QuerySearchRequest) {
-            mapOf("q" to request.value)
-        } else {
-            mapOf()
+        val queryMap = when (val query = request.query) {
+            is FreeFormSearchQuery -> mapOf("q" to query.value)
+            is StructuredSearchQuery -> buildMap {
+                query.street?.let { put("street", it) }
+                query.city?.let { put("city", it) }
+                query.county?.let { put("county", it) }
+                query.state?.let { put("state", it) }
+                query.country?.let { put("country", it) }
+                query.postalCode?.let { put("postalcode", it) }
+            }
         }
 
         val response = api.search(
