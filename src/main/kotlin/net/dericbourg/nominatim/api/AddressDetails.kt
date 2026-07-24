@@ -9,7 +9,7 @@ data class AddressDetails(
     @SerializedName("region") val region: String?,
     @SerializedName("state") val state: String?,
     @SerializedName("state_district") val stateDistrict: String?,
-    @SerializedName("county") val county: String,
+    @SerializedName("county") val county: String?,
     @SerializedName("municipality") val municipality: String?,
     @SerializedName("postcode") val postCode: String?,
     @SerializedName("city") val city: String?,
