@@ -17,6 +17,16 @@ import net.dericbourg.nominatim.client.NominatimClient
 val client = NominatimClient.create()
 ```
 
+The [Nominatim Usage Policy](https://operations.osmfoundation.org/policies/nominatim/)
+requires a valid HTTP `User-Agent` identifying your application. Set one explicitly:
+
+```kotlin
+val client = NominatimClient.create("MyApp/1.0 (contact@example.com)")
+```
+
+Alternatively, `NominatimClient.create()` reads the `NOMINATIM_USER_AGENT`
+environment variable if set, and otherwise falls back to a generic default.
+
 ### Perform a request
 
 ```kotlin

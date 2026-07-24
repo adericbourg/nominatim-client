@@ -18,20 +18,24 @@ internal interface NominatimRetrofitApi {
 
         private const val BaseUrl = "https://nominatim.openstreetmap.org"
 
-        private val httpClient: OkHttpClient by lazy {
-            OkHttpClient.Builder().build()
-        }
+        internal fun create(userAgent: String, baseUrl: String = BaseUrl): NominatimRetrofitApi {
+            val httpClient = OkHttpClient.Builder()
+                .addInterceptor { chain ->
+                    chain.proceed(
+                        chain.request().newBuilder()
+                            .header("User-Agent", userAgent)
+                            .build()
+                    )
+                }
+                .build()
 
-        private val retrofit: Retrofit by lazy {
-            Retrofit.Builder()
-                .baseUrl(BaseUrl)
+            val retrofit = Retrofit.Builder()
+                .baseUrl(baseUrl)
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(httpClient)
                 .build()
-        }
 
-        internal val nominatimRetrofitApi: NominatimRetrofitApi by lazy {
-            retrofit.create(NominatimRetrofitApi::class.java)
+            return retrofit.create(NominatimRetrofitApi::class.java)
         }
     }
 }

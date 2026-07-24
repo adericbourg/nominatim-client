@@ -3,13 +3,13 @@ package net.dericbourg.nominatim.client
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-class NominatimHttpClient : NominatimClient {
+class NominatimHttpClient(userAgent: String) : NominatimClient {
 
     companion object {
         val log: Logger = LoggerFactory.getLogger(this::class.java)
     }
 
-    private val api = NominatimRetrofitApi.nominatimRetrofitApi
+    private val api = NominatimRetrofitApi.create(userAgent)
 
     override fun search(request: SearchRequest): SearchResponse {
         val queryMap = if (request is QuerySearchRequest) {
