@@ -6,7 +6,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>net.dericbourg</groupId>
     <artifactId>nominatim-client</artifactId>
-    <version>1.0.8-SNAPSHOT</version>
+    <version>1.0.9</version>
     <name>OSRM Nominatim client</name>
     <description>
         A JVM OpenStreetMap's Nominatim client
