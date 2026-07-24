@@ -63,7 +63,7 @@ jobs:
       - name: Verify
         run: ./mvnw --batch-mode verify
       - name: Publish release package
-        run: ./mvnw -P release --batch-mode deploy -DskipTests
+        run: ./mvnw --batch-mode deploy -DskipTests
         env:
           MAVEN_USERNAME: ${{ secrets.CENTRAL_TOKEN_USERNAME }}
           MAVEN_PASSWORD: ${{ secrets.CENTRAL_TOKEN_PASSWORD }}
@@ -74,7 +74,7 @@ jobs:
         run: |
           git commit -am "chore: prepare next development iteration ${{ steps.versions.outputs.next_snapshot }}"
       - name: Publish snapshot package
-        run: ./mvnw -P release --batch-mode deploy -DskipTests
+        run: ./mvnw --batch-mode deploy -DskipTests
         env:
           MAVEN_USERNAME: ${{ secrets.CENTRAL_TOKEN_USERNAME }}
           MAVEN_PASSWORD: ${{ secrets.CENTRAL_TOKEN_PASSWORD }}
