@@ -2,6 +2,7 @@ package net.dericbourg.nominatim.api
 
 import com.google.gson.annotations.SerializedName
 
+/** The place matching a [net.dericbourg.nominatim.client.ReverseRequest], as returned by the Nominatim `/reverse` endpoint. */
 data class ReverseResult(
     @SerializedName("place_id") val placeId: Long,
     @SerializedName("licence") val licence: String?,

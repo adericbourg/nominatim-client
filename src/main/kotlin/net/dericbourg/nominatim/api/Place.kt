@@ -2,6 +2,7 @@ package net.dericbourg.nominatim.api
 
 import com.google.gson.annotations.SerializedName
 
+/** A place matching a [net.dericbourg.nominatim.client.SearchRequest], as returned by the Nominatim `/search` endpoint. */
 data class Place(
     @SerializedName("place_id") val placeId: Long,
     @SerializedName("boundingbox") val boundingBox: List<Double>,

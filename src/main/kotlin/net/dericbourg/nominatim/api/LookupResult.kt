@@ -2,6 +2,7 @@ package net.dericbourg.nominatim.api
 
 import com.google.gson.annotations.SerializedName
 
+/** A place matching a [net.dericbourg.nominatim.client.LookupRequest], as returned by the Nominatim `/lookup` endpoint. */
 data class LookupResult(
     @SerializedName("place_id") val placeId: Long,
     @SerializedName("licence") val licence: String?,

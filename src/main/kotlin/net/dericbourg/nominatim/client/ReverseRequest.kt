@@ -9,10 +9,12 @@ import net.dericbourg.nominatim.api.OsmType
  */
 sealed interface ReverseLocation {
     companion object {
+        /** Reverse geocode WGS84 [lat]/[lon] coordinates. */
         fun coordinates(lat: Double, lon: Double): ReverseLocation {
             return CoordinatesReverseLocation(lat, lon)
         }
 
+        /** Reverse geocode a known OSM object, e.g. `ReverseLocation.osmObject(OsmType.WAY, 5013364)`. */
         fun osmObject(type: OsmType, id: Long): ReverseLocation {
             return OsmObjectReverseLocation(type, id)
         }
@@ -23,6 +25,7 @@ internal data class CoordinatesReverseLocation(val lat: Double, val lon: Double)
 
 internal data class OsmObjectReverseLocation(val type: OsmType, val id: Long) : ReverseLocation
 
+/** A request to the Nominatim `/reverse` endpoint. */
 data class ReverseRequest(
     val location: ReverseLocation,
     /** Level of detail for the address breakdown, 0 (country) to 18 (building); Nominatim default is 18. */

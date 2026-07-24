@@ -8,6 +8,9 @@ interface NominatimClient {
     /**
      * The search API allows you to look up a location from a textual description or address.
      * Nominatim supports structured and free-form search queries.
+     *
+     * @throws BadRequestException if Nominatim rejects the request.
+     * @throws UnavailableException if Nominatim fails to fulfill the request.
      */
     fun search(request: SearchRequest): SearchResponse
 
@@ -15,12 +18,18 @@ interface NominatimClient {
      * The reverse geocoding API generates an address from a coordinate given as `latitude` and `longitude`.
      *
      * Returns `null` when Nominatim finds no place for the given location.
+     *
+     * @throws BadRequestException if Nominatim rejects the request.
+     * @throws UnavailableException if Nominatim fails to fulfill the request.
      */
     fun reverse(request: ReverseRequest): ReverseResult?
 
     /**
      * The lookup API allows querying the address and other details of one or multiple places
      * by their OSM ids.
+     *
+     * @throws BadRequestException if Nominatim rejects the request.
+     * @throws UnavailableException if Nominatim fails to fulfill the request.
      */
     fun lookup(request: LookupRequest): List<LookupResult>
 

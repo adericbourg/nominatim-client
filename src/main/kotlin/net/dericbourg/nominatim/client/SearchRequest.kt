@@ -8,10 +8,12 @@ package net.dericbourg.nominatim.client
  */
 sealed interface SearchQuery {
     companion object {
+        /** A free-form search, e.g. `SearchQuery.freeForm("tour eiffel, paris")`. */
         fun freeForm(value: String): SearchQuery {
             return FreeFormSearchQuery(value)
         }
 
+        /** A structured search over individual address components. */
         fun structured(
             street: String? = null,
             city: String? = null,
@@ -51,6 +53,7 @@ data class ViewBox(val x1: Double, val y1: Double, val x2: Double, val y2: Doubl
     internal fun toParam(): String = "$x1,$y1,$x2,$y2"
 }
 
+/** A request to the Nominatim `/search` endpoint. */
 data class SearchRequest(
     val query: SearchQuery,
     /** Limit the number of returned results (1-50, Nominatim default is 10). */

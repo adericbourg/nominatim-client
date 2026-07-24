@@ -2,6 +2,7 @@ package net.dericbourg.nominatim.api
 
 import com.google.gson.annotations.SerializedName
 
+/** The structured address breakdown of a place, as returned by Nominatim's `addressdetails` parameter. */
 data class AddressDetails(
     @SerializedName("continent") val continent: String?,
     @SerializedName("country") val country: String?,
