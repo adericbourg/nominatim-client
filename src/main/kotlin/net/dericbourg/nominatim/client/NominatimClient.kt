@@ -1,5 +1,7 @@
 package net.dericbourg.nominatim.client
 
+import net.dericbourg.nominatim.api.ReverseResult
+
 interface NominatimClient {
 
     /**
@@ -7,6 +9,13 @@ interface NominatimClient {
      * Nominatim supports structured and free-form search queries.
      */
     fun search(request: SearchRequest): SearchResponse
+
+    /**
+     * The reverse geocoding API generates an address from a coordinate given as `latitude` and `longitude`.
+     *
+     * Returns `null` when Nominatim finds no place for the given location.
+     */
+    fun reverse(request: ReverseRequest): ReverseResult?
 
     companion object {
 

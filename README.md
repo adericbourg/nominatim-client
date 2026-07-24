@@ -27,7 +27,7 @@ val client = NominatimClient.create("MyApp/1.0 (contact@example.com)")
 Alternatively, `NominatimClient.create()` reads the `NOMINATIM_USER_AGENT`
 environment variable if set, and otherwise falls back to a generic default.
 
-### Perform a request
+### Search
 
 ```kotlin
 import net.dericbourg.nominatim.client.SearchRequest
@@ -52,5 +52,22 @@ val searchResponse = client.search(
 val searchResponse = client.search(
     SearchRequest.query("tour eiffel").copy(limit = 5, countryCodes = listOf("fr"))
 )
+```
+
+### Reverse geocode
+
+```kotlin
+import net.dericbourg.nominatim.client.ReverseRequest
+
+val place = client.reverse(ReverseRequest.coordinates(lat = 48.8583, lon = 2.2945))
+```
+
+`client.reverse(...)` returns `null` when Nominatim finds no place for the given location.
+A known OSM object can be reverse geocoded instead of coordinates:
+
+```kotlin
+import net.dericbourg.nominatim.api.OsmType
+
+val place = client.reverse(ReverseRequest.osmObject(OsmType.WAY, 5013364))
 ```
 

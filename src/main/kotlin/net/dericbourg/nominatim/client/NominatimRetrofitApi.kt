@@ -1,5 +1,6 @@
 package net.dericbourg.nominatim.client
 
+import com.google.gson.JsonObject
 import net.dericbourg.nominatim.api.Place
 import okhttp3.OkHttpClient
 import retrofit2.Call
@@ -13,6 +14,11 @@ internal interface NominatimRetrofitApi {
 
     @GET("/search")
     fun search(@QueryMap queryMap: Map<String, String>): Call<List<Place>>
+
+    // Nominatim returns HTTP 200 with a `{"error": "..."}` body when no place is found,
+    // so the raw JSON is decoded here and mapped to ReverseResult? in NominatimHttpClient.
+    @GET("/reverse")
+    fun reverse(@QueryMap queryMap: Map<String, String>): Call<JsonObject>
 
     companion object {
 

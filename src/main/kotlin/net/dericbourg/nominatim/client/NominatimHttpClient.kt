@@ -1,5 +1,7 @@
 package net.dericbourg.nominatim.client
 
+import com.google.gson.Gson
+import net.dericbourg.nominatim.api.ReverseResult
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
@@ -16,6 +18,7 @@ class NominatimHttpClient internal constructor(userAgent: String, baseUrl: Strin
     } else {
         NominatimRetrofitApi.create(userAgent)
     }
+    private val gson = Gson()
 
     override fun search(request: SearchRequest): SearchResponse {
         val queryMap = buildMap {
@@ -59,6 +62,46 @@ class NominatimHttpClient internal constructor(userAgent: String, baseUrl: Strin
         when (response.code()) {
             in 400..500 -> throw BadRequestException("Invalid request")
             else -> throw UnavailableException("Unable to perform search")
+        }
+    }
+
+    override fun reverse(request: ReverseRequest): ReverseResult? {
+        val queryMap = buildMap {
+            when (val location = request.location) {
+                is CoordinatesReverseLocation -> {
+                    put("lat", location.lat.toString())
+                    put("lon", location.lon.toString())
+                }
+
+                is OsmObjectReverseLocation -> {
+                    put("osm_type", location.type.code)
+                    put("osm_id", location.id.toString())
+                }
+            }
+            request.zoom?.let { put("zoom", it.toString()) }
+            request.acceptLanguage?.let { put("accept-language", it) }
+            request.email?.let { put("email", it) }
+            request.extraTags?.let { put("extratags", if (it) "1" else "0") }
+            put("addressdetails", "1")
+            put("namedetails", "1")
+            put("format", "jsonv2")
+        }
+
+        val response = api.reverse(queryMap).execute()
+
+        if (response.isSuccessful) {
+            val body = response.body()
+            if (body == null || body.has("error")) {
+                return null
+            }
+            return gson.fromJson(body, ReverseResult::class.java)
+        }
+        if (response.errorBody() != null) {
+            log.error("Failed to reverse geocode. Got: '${response.errorBody()}'")
+        }
+        when (response.code()) {
+            in 400..500 -> throw BadRequestException("Invalid request")
+            else -> throw UnavailableException("Unable to reverse geocode")
         }
     }
 }
