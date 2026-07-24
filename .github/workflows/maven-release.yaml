@@ -1,0 +1,83 @@
+name: Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      bump:
+        description: 'Version part to bump'
+        type: choice
+        options: [major, minor, patch]
+        required: true
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ensure running from main
+        if: github.ref != 'refs/heads/main'
+        run: |
+          echo "::error::Releases can only be run from the main branch (got ${{ github.ref }})"
+          exit 1
+      - uses: actions/checkout@v7
+      - name: Set up Maven Central Repository
+        uses: actions/setup-java@v5
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          server-id: central
+          server-username: MAVEN_USERNAME
+          server-password: MAVEN_PASSWORD
+          gpg-private-key: ${{ secrets.GPG_SIGNING_KEY }}
+          gpg-passphrase: MAVEN_GPG_PASSPHRASE
+      - name: Configure git identity
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+      - name: Compute versions
+        id: versions
+        run: |
+          current=$(./mvnw -q help:evaluate -Dexpression=project.version -DforceStdout)
+          base=${current%-SNAPSHOT}
+          IFS='.' read -r major minor patch <<< "$base"
+
+          case "${{ inputs.bump }}" in
+            major) release="$((major + 1)).0.0" ;;
+            minor) release="${major}.$((minor + 1)).0" ;;
+            patch) release="${major}.${minor}.$((patch + 1))" ;;
+          esac
+
+          IFS='.' read -r rmajor rminor rpatch <<< "$release"
+          next_snapshot="${rmajor}.${rminor}.$((rpatch + 1))-SNAPSHOT"
+
+          echo "release=${release}" >> "$GITHUB_OUTPUT"
+          echo "next_snapshot=${next_snapshot}" >> "$GITHUB_OUTPUT"
+      - name: Set release version
+        run: ./mvnw versions:set -DnewVersion=${{ steps.versions.outputs.release }} -DgenerateBackupPoms=false
+      - name: Commit and tag release
+        run: |
+          git commit -am "release: ${{ steps.versions.outputs.release }}"
+          git tag "${{ steps.versions.outputs.release }}"
+      - name: Verify
+        run: ./mvnw --batch-mode verify
+      - name: Publish release package
+        run: ./mvnw -P release --batch-mode deploy -DskipTests
+        env:
+          MAVEN_USERNAME: ${{ secrets.CENTRAL_TOKEN_USERNAME }}
+          MAVEN_PASSWORD: ${{ secrets.CENTRAL_TOKEN_PASSWORD }}
+          MAVEN_GPG_PASSPHRASE: ${{ secrets.GPG_SIGNING_KEY_PASSWORD }}
+      - name: Set next development version
+        run: ./mvnw versions:set -DnewVersion=${{ steps.versions.outputs.next_snapshot }} -DgenerateBackupPoms=false
+      - name: Commit next development version
+        run: |
+          git commit -am "chore: prepare next development iteration ${{ steps.versions.outputs.next_snapshot }}"
+      - name: Publish snapshot package
+        run: ./mvnw -P release --batch-mode deploy -DskipTests
+        env:
+          MAVEN_USERNAME: ${{ secrets.CENTRAL_TOKEN_USERNAME }}
+          MAVEN_PASSWORD: ${{ secrets.CENTRAL_TOKEN_PASSWORD }}
+          MAVEN_GPG_PASSPHRASE: ${{ secrets.GPG_SIGNING_KEY_PASSWORD }}
+      - name: Push
+        run: git push origin main --follow-tags
