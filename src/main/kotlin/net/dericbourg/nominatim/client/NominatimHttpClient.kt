@@ -1,6 +1,7 @@
 package net.dericbourg.nominatim.client
 
 import com.google.gson.Gson
+import net.dericbourg.nominatim.api.LookupResult
 import net.dericbourg.nominatim.api.ReverseResult
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -102,6 +103,35 @@ class NominatimHttpClient internal constructor(userAgent: String, baseUrl: Strin
         when (response.code()) {
             in 400..500 -> throw BadRequestException("Invalid request")
             else -> throw UnavailableException("Unable to reverse geocode")
+        }
+    }
+
+    override fun lookup(request: LookupRequest): List<LookupResult> {
+        val queryMap = buildMap {
+            put("osm_ids", request.osmIds.joinToString(",") { it.toParam() })
+            request.acceptLanguage?.let { put("accept-language", it) }
+            request.email?.let { put("email", it) }
+            request.extraTags?.let { put("extratags", if (it) "1" else "0") }
+            put("addressdetails", "1")
+            put("namedetails", "1")
+            put("format", "jsonv2")
+        }
+
+        val response = api.lookup(queryMap).execute()
+
+        if (response.isSuccessful) {
+            if (response.body() == null) {
+                log.warn("Got successful lookup response with empty body")
+                return emptyList()
+            }
+            return response.body()!!
+        }
+        if (response.errorBody() != null) {
+            log.error("Failed to lookup. Got: '${response.errorBody()}'")
+        }
+        when (response.code()) {
+            in 400..500 -> throw BadRequestException("Invalid request")
+            else -> throw UnavailableException("Unable to lookup")
         }
     }
 }

@@ -1,5 +1,6 @@
 package net.dericbourg.nominatim.client
 
+import net.dericbourg.nominatim.api.LookupResult
 import net.dericbourg.nominatim.api.ReverseResult
 
 interface NominatimClient {
@@ -16,6 +17,12 @@ interface NominatimClient {
      * Returns `null` when Nominatim finds no place for the given location.
      */
     fun reverse(request: ReverseRequest): ReverseResult?
+
+    /**
+     * The lookup API allows querying the address and other details of one or multiple places
+     * by their OSM ids.
+     */
+    fun lookup(request: LookupRequest): List<LookupResult>
 
     companion object {
 

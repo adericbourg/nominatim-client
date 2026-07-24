@@ -1,6 +1,7 @@
 package net.dericbourg.nominatim.client
 
 import com.google.gson.JsonObject
+import net.dericbourg.nominatim.api.LookupResult
 import net.dericbourg.nominatim.api.Place
 import okhttp3.OkHttpClient
 import retrofit2.Call
@@ -19,6 +20,9 @@ internal interface NominatimRetrofitApi {
     // so the raw JSON is decoded here and mapped to ReverseResult? in NominatimHttpClient.
     @GET("/reverse")
     fun reverse(@QueryMap queryMap: Map<String, String>): Call<JsonObject>
+
+    @GET("/lookup")
+    fun lookup(@QueryMap queryMap: Map<String, String>): Call<List<LookupResult>>
 
     companion object {
 

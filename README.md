@@ -71,3 +71,14 @@ import net.dericbourg.nominatim.api.OsmType
 val place = client.reverse(ReverseRequest.osmObject(OsmType.WAY, 5013364))
 ```
 
+### Lookup
+
+```kotlin
+import net.dericbourg.nominatim.client.LookupRequest
+import net.dericbourg.nominatim.client.OsmId
+
+val places = client.lookup(
+    LookupRequest(osmIds = listOf(OsmId(OsmType.WAY, 5013364), OsmId(OsmType.NODE, 7992604958)))
+)
+```
+
