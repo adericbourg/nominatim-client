@@ -3,13 +3,19 @@ package net.dericbourg.nominatim.client
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-class NominatimHttpClient(userAgent: String) : NominatimClient {
+class NominatimHttpClient internal constructor(userAgent: String, baseUrl: String? = null) : NominatimClient {
+
+    constructor(userAgent: String) : this(userAgent, null)
 
     companion object {
         val log: Logger = LoggerFactory.getLogger(this::class.java)
     }
 
-    private val api = NominatimRetrofitApi.create(userAgent)
+    private val api = if (baseUrl != null) {
+        NominatimRetrofitApi.create(userAgent, baseUrl)
+    } else {
+        NominatimRetrofitApi.create(userAgent)
+    }
 
     override fun search(request: SearchRequest): SearchResponse {
         val queryMap = if (request is QuerySearchRequest) {
@@ -37,12 +43,8 @@ class NominatimHttpClient(userAgent: String) : NominatimClient {
             log.error("Failed to search. Got: '${response.errorBody()}'")
         }
         when (response.code()) {
-            in 400..500 -> throw BadRequestSearchException("Invalid request")
-            else -> throw UnavailableSearchException("Unable for perform search")
+            in 400..500 -> throw BadRequestException("Invalid request")
+            else -> throw UnavailableException("Unable to perform search")
         }
     }
-
-    abstract class SearchFailureException(message: String, cause: Throwable? = null) : RuntimeException(message, cause)
-    class BadRequestSearchException(message: String) : SearchFailureException(message)
-    class UnavailableSearchException(message: String) : SearchFailureException(message)
 }
