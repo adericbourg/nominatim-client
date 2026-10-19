@@ -1,0 +1,12 @@
+<settings xmlns="http://maven.apache.org/SETTINGS/1.3.0">
+    <servers>
+        <server>
+            <id>central</id>
+            <username>${env.MAVEN_USERNAME}</username>
+            <password>${env.MAVEN_PASSWORD}</password>
+            <repositoryOrigins>
+                <repositoryOrigin>https://central.sonatype.com</repositoryOrigin>
+            </repositoryOrigins>
+        </server>
+    </servers>
+</settings>
