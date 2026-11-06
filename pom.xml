@@ -29,7 +29,7 @@
     <properties>
         <kotlin.version>2.4.21</kotlin.version>
         <kotlin.compiler.incremental>true</kotlin.compiler.incremental>
-        <dokka.version>2.2.0</dokka.version>
+        <dokka.version>2.3.0</dokka.version>
         <retrofit2.version>3.0.0</retrofit2.version>
         <sonatype.url>https://central.sonatype.com</sonatype.url>
     </properties>
